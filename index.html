@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASS</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3eef6, #ffffff);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-y: scroll;
+        }
+
+        body::-webkit-scrollbar { width: 0; }
+
+        .navbar {
+            padding: 14px 32px;
+            height: 7vh;
+            background-color: #146ebe;
+            color: white;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .navbar .title { font-size: 1.3rem; font-weight: 600; }
+
+        .description-box {
+            width: 80%;
+            max-width: 900px;
+            margin: 30px auto 20px;
+            padding: 22px 30px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            border: 4px double #146ebe;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+        }
+
+        .description-box h2 { margin: 0 0 10px; font-size: 1.5rem; color: #134f8c; text-align: center; }
+        .description-box p { margin: 0; font-size: 1rem; color: #2f3a46; line-height: 1.6; text-align: justify; }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+            width: 85%;
+            padding: 20px 0 50px;
+            margin: auto;
+            flex: 1;
+        }
+
+        .card {
+            background: white;
+            width: 80%;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+            overflow: hidden;
+            text-align: center;
+            margin: auto;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .card img { width: 100%; height: 240px; object-fit: cover; }
+        .card-title-bg { background-color: #9dcbf9; }
+        .card-title { font-size: 1.4rem; font-weight: 600; padding: 14px 0; color: #2c3e50; }
+        .button { display: inline-block; margin-bottom: 16px; padding: 8px 20px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; background-color: #146ebe; color: white; transition: background-color 0.25s; }
+        .button:hover { background-color: #0f5a9a; }
+
+        .footer {
+            background-color: #146ebe;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 28px;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-left { font-weight: 400; margin-bottom: 8px; }
+        .contact-btn { background: white; color: #146ebe; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: background 0.25s, color 0.25s; }
+        .contact-btn:hover { background: #dcecff; color: #0f5a9a; }
+
+        /* --- MODAL --- */
+        .modal { display: none; position: fixed; z-index: 50; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+        .modal-content { background: white; width: 80%; max-width: 420px; padding: 24px 28px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.25); animation: fadeIn 0.3s ease; }
+        .close { float: right; font-size: 24px; cursor: pointer; }
+        #contactForm input, #contactForm textarea { width: 90%; padding: 10px 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; font-family: inherit; }
+        .submit-btn { width: 100%; margin-top: 10px; padding: 10px; border: none; background-color: #146ebe; color: white; font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: background 0.25s; }
+        .submit-btn:hover { background: #0f5a9a; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        /* --- RESPONSIVE --- */
+        @media screen and (max-width: 1024px) {
+            .description-box { width: 90%; padding: 18px 22px; }
+            .description-box h2 { font-size: 1.4rem; }
+            .description-box p { font-size: 0.95rem; }
+            .card-title { font-size: 1.3rem; }
+            .button { font-size: 0.85rem; padding: 7px 18px; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .navbar .title { font-size: 1.2rem; }
+            .container { gap: 20px; width: 90%; }
+            .card { width: 90%; }
+            .card img { height: 200px; }
+            .description-box { width: 95%; padding: 16px 20px; }
+        }
+
+        @media screen and (max-width: 480px) {
+            .navbar { padding: 12px 16px; height: auto; }
+            .footer { flex-direction: column; text-align: center; }
+            .footer-left { margin-bottom: 6px; }
+            .contact-btn { margin-top: 4px; }
+            .card img { height: 160px; }
+            .card-title { font-size: 1.2rem; padding: 10px 0; }
+            .button { font-size: 0.8rem; padding: 6px 16px; }
+            .description-box h2 { font-size: 1.3rem; }
+            .description-box p { font-size: 0.9rem; }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="title">Micro Architecture Simulator Suite</div>
+    </div>
+
+    <div class="description-box">
+        <h2>Welcome to MASS</h2>
+        <p>
+            MASS (Micro Architecture Simulator Suite) provides a simple yet powerful environment for 
+            exploring processor microarchitecture.
+            It features an interactive RISC-V Pipeline Simulator and a detailed Cache Simulator, allowing 
+            step-by-step visualization of instruction flow, hazards, stalls, and memory access behavior.
+            Designed for students, educators, and researchers, the suite makes Computer Architecture 
+            concepts intuitive and engaging. <br/>
+            Click the Launch buttons to access the simulators and engage in interactive learning,
+            teaching, and experimentation.
+        </p>
+    </div>
+
+    <div class="container">
+
+        <div class="card">
+            <img src="risc.png" alt="RISC-V Pipeline Simulator">
+            <div class="card-title-bg">
+                <div class="card-title">RISC-V Pipeline Simulator</div>
+                <a class="button" href="https://risc-v-cpu-visualizer.vercel.app/">Launch</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="cache.png" alt="Cache Simulator">
+            <div class="card-title-bg">
+                <div class="card-title">Cache Simulator</div>
+                <a class="button" href="https://cache-visualizer.vercel.app/">Launch</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <div class="footer-left">
+            © 2025 MASS | Designed by Saurav, Harsh & Vijay Sai
+        </div>
+
+        <button class="contact-btn" onclick="openForm()">Contact Us</button>
+    </div>
+
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeForm()">&times;</span>
+            <h2>Contact Us</h2>
+
+            <form id="contactForm">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <input type="text" name="subject" placeholder="Subject" required>
+                <textarea name="message" rows="4" placeholder="Your Message" required></textarea>
+
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('contactForm');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            emailjs.sendForm("service_71evou2", "template_e77sgxu", this)
+            .then(() => {
+                alert('Message sent successfully!');
+                form.reset();
+                closeForm();
+            }, (error) => {
+                alert('Oops! Something went wrong. Please try again.');
+                console.log(error);
+            });
+        });
+
+        function openForm() {
+            document.getElementById("contactModal").style.display = "flex";
+        }
+
+        function closeForm() {
+            document.getElementById("contactModal").style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById("contactModal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+    </script>
+
+    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init("ik4wzI05JqVFQAmyH");
+        })();
+    </script>
+
+</body>
+</html>
