@@ -38,9 +38,6 @@ You can try MASS online here:
 
 ## **Screenshots**
 
-![Dashboard Screenshot](dashboard.png)  
-*Sample view of the MASS simulator home page.*
-
 ![Pipeline Simulator Screenshot](risc.png)  
 *RISC-V Pipeline Simulator in action.*
 
